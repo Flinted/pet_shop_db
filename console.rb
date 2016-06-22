@@ -1,9 +1,10 @@
 require_relative('./models/pet')
 require_relative('./models/pet_store')
+require_relative('./db/Runner')
 runner = SqlRunner.new({dbname: 'pet_store', host: 'localhost'})
 
-pet_store1 = PetShop.new({'name' => 'Turtles R us', 'address' => '15 wet street', 'stock_type' => 'aquatic'}, runner)
-pet_store2 = PetShop.new({'name' => 'Monkey Business', 'address' => '85 the tree tops', 'stock_type' => 'monkeys'}, runner)
+pet_store1 = PetStore.new({'name' => 'Turtles R us', 'address' => '15 wet street', 'stock_type' => 'aquatic'}, runner)
+pet_store2 = PetStore.new({'name' => 'Monkey Business', 'address' => '85 the tree tops', 'stock_type' => 'monkeys'}, runner)
 
 pet_store1.save()
 pet_store2.save()
@@ -21,3 +22,17 @@ pet3.save()
 pet4.save()
 pet5.save()
 pet6.save()
+
+puts Pet.all(runner)
+puts pet1.show_store
+puts pet3.show_store
+puts PetStore.all(runner)
+puts PetStore.find_store(runner, 2)
+puts Pet.find_pet(runner,2)
+pet_store1.update({'name' => 'Turtles R yours', 'address' => '15 wet street', 'stock_type' => 'aquatic'})
+puts pet1.show_store
+pet_store2.delete
+PetStore.list_stores(runner)
+pet3.delete
+pet2.update({'name' => 'ROGER THE GREAT', 'type' => 'terrapin', 'store_id' => pet_store1.id})
+puts Pet.find_pet(runner,2)

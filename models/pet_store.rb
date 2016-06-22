@@ -1,7 +1,11 @@
 class PetStore
 
+
+  attr_reader(:id,:name)
+  
+
   def initialize(options,runner)
-     @id = options['id'] 
+     @id = options['id'].to_i
      @name = options['name']
      @address =  options['address']
      @stock_type = options['stock_type']
@@ -20,4 +24,31 @@ class PetStore
     stores = return_info.map {|store| PetStore.new(store, runner)}
     return stores
   end
+
+  def self.list_stores(runner)
+    stores = self.all(runner)
+    stores.each {|store| puts "#{store.name}"}
+  end
+
+  def self.find_store(runner, id)
+    sql = "SELECT * FROM pet_shops WHERE id = #{id}"
+    store = runner.run(sql)
+    return store.first['name']
+  end
+
+  def update(options)
+    @name = options['name'] if options['name']
+    @address = options['address'] if options['address']
+    @stock_type = options['stock_type'] if options['stock_type']
+
+    sql = "UPDATE pet_shops SET name = '#{@name}', address = '#{@address}', stock_type = '#{@stock_type}' WHERE id = #{@id}"
+    @runner.run(sql)
+  end
+
+  def delete()
+    sql = "DELETE FROM pets WHERE store_id = #{@id};
+    DELETE FROM pet_shops WHERE id = #{@id}"
+    @runner.run(sql)
+  end
+
 end

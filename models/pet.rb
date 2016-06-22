@@ -1,10 +1,10 @@
 class Pet
 
   def initialize(options, runner)
-    @id = options['id']
+    @id = options['id'].to_i
     @name = options['name']
     @type = options['type']
-    @store_id = options['store_id']
+    @store_id = options['store_id'].to_i
     @runner =runner
   end
 
@@ -23,8 +23,28 @@ class Pet
   end
 
   def show_store()
-    sql = "SELECT * FROM pet_shops WHERE id = #{@id}"
-    store = @runner.run(sql).first
-    return store['name']
+    sql = "SELECT * FROM pet_shops WHERE id = #{@store_id}"
+    store = @runner.run(sql)
+    return store[0]['name']
+  end
+
+  def self.find_pet(runner, id)
+    sql = "SELECT * FROM pets WHERE id = #{id}"
+    pet = runner.run(sql)
+    return pet.first['name']
+  end
+
+  def update(options)
+    @name = options['name'] if options['name']
+    @type = options['type'] if options['type']
+    @store_id = options['store_id'] if options['store_id']
+
+    sql = "UPDATE pets SET name = '#{@name}', type = '#{@type}', store_id = '#{@store_id}' WHERE id = #{@id}"
+    @runner.run(sql)
+  end
+
+  def delete()
+    sql = "DELETE FROM pets WHERE id = #{@id}"
+    @runner.run(sql)
   end
 end
