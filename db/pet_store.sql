@@ -10,5 +10,6 @@ CREATE TABLE pet_shops (
 
 CREATE TABLE pets (
   name VARCHAR(255),
-  type VARCHAR(255)
+  type VARCHAR(255),
+  store_id INT4 references pet_shops(id)
 );
