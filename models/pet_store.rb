@@ -1,9 +1,6 @@
 class PetStore
-
-
-  attr_reader(:id,:name)
+  attr_reader( :id, :name )
   
-
   def initialize(options,runner)
      @id = options['id'].to_i
      @name = options['name']
@@ -34,6 +31,13 @@ class PetStore
     sql = "SELECT * FROM pet_shops WHERE id = #{id}"
     store = runner.run(sql)
     return store.first['name']
+  end
+
+  def list_stores_pets()
+    sql = "SELECT * FROM pets WHERE store_id = #{@id}"
+    pets = @runner.run(sql)
+    pet_data = pets.map {|pet| Pet.new(pet, @runner)}
+    return pet_data
   end
 
   def update(options)

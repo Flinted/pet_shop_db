@@ -25,7 +25,7 @@ class Pet
   def show_store()
     sql = "SELECT * FROM pet_shops WHERE id = #{@store_id}"
     store = @runner.run(sql)
-    return store[0]['name']
+    return store.first['name']
   end
 
   def self.find_pet(runner, id)
